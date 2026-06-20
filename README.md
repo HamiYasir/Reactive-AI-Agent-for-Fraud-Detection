@@ -80,7 +80,7 @@ Users can:
 
 <u>Architecture Diagram for Hosted Deployment</u>:
 
-![architecture_diagram_hosted](assets\architecture_diagram_hosted.png)
+![architecture_diagram_hosted](assets/architecture_diagram_hosted.png)
 
 ### Local Deployment
 
@@ -97,7 +97,7 @@ The local deployment contains the complete architecture. This is the full implem
 
 <u>Architecture Diagram for Local Deployment</u>:
 
-![architecture_diagram_local](assets\architecture_diagram_local.png)
+![architecture_diagram_local](assets/architecture_diagram_local.png)
 
 ## DEPLOYMENT
 
