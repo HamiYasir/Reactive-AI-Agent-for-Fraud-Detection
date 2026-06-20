@@ -1,0 +1,26 @@
+hosted-deployment
+
+# IntelliJ
+.idea/
+*.iml
+
+# Python
+__pycache__/
+*.pyc
+
+# Gradle
+.gradle/
+
+# Build outputs
+build/
+**/build/
+
+# Logs
+*.log
+
+# Large datasets
+creditcard_2023.csv
+
+# OS files
+.DS_Store
+Thumbs.db

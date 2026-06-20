@@ -1,0 +1,60 @@
+plugins {
+    id 'java'
+    id 'application'
+    id 'org.springframework.boot' version '3.2.1'  // ✅ Required for bootRun
+    id 'io.spring.dependency-management' version '1.1.4'
+}
+
+group = 'com.fraud.detection'
+version = '1.0.0'
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation project(':ml-library') // ✅ Include ML library
+
+    // ✅ Spring Boot dependencies
+    implementation 'org.springframework.boot:spring-boot-starter-websocket'  // ✅ Required for WebSockets
+    implementation 'org.springframework.boot:spring-boot-starter-web'        // ✅ Ensure Web support is enabled
+    implementation 'org.springframework.boot:spring-boot-starter'
+    implementation 'org.springframework.boot:spring-boot-starter-thymeleaf'
+    implementation 'org.springframework.boot:spring-boot-starter-json'
+    implementation 'com.fasterxml.jackson.core:jackson-databind:2.15.3'
+    implementation 'org.springframework.boot:spring-boot-starter-validation'
+    implementation 'org.springframework.boot:spring-boot-starter-data-jpa'
+    implementation 'org.springframework.boot:spring-boot-starter-actuator'
+    implementation 'mysql:mysql-connector-java:8.0.33'
+    implementation 'org.springframework.kafka:spring-kafka'
+    implementation 'org.apache.commons:commons-csv:1.10.0'
+
+    // ✅ Machine Learning dependencies
+    implementation 'nz.ac.waikato.cms.weka:weka-stable:3.8.6'
+
+    // ✅ Lombok for reducing boilerplate
+    compileOnly 'org.projectlombok:lombok'
+    annotationProcessor 'org.projectlombok:lombok'
+
+    // ✅ Testing dependencies
+    testImplementation 'org.springframework.boot:spring-boot-starter-test'
+}
+
+tasks.named('test') {
+    useJUnitPlatform()
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
+    sourceCompatibility = '17'  // Ensure Java 17 if using JDK 17
+}
+
+bootJar {
+    mainClass = 'com.fraud.detection.app.FraudDetectionApplication' // ✅ Ensure this is correct
+}
+
+application {
+    mainClass = 'com.fraud.detection.app.FraudDetectionApplication' // ✅ Ensure this is correct
+}

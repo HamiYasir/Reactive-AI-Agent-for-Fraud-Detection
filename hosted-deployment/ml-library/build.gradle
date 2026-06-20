@@ -1,0 +1,19 @@
+//ml-library/build.gradle
+plugins {
+    id 'java-library'
+}
+
+repositories {
+    mavenCentral()
+}
+
+dependencies {
+    implementation 'nz.ac.waikato.cms.weka:weka-stable:3.8.6' // Weka ML Library
+    implementation 'org.nd4j:nd4j-native-platform:1.0.0-beta7' // DL4J for AI
+}
+
+java {
+    toolchain {
+        languageVersion.set(JavaLanguageVersion.of(17))
+    }
+}

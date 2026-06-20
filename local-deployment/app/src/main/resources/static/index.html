@@ -1,0 +1,279 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <title>Fraud Detection</title>
+
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/sockjs-client/1.5.1/sockjs.min.js"></script>
+    <script src="https://cdnjs.cloudflare.com/ajax/libs/stomp.js/2.3.3/stomp.min.js"></script>
+
+    <style>
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background: #f4f6f8;
+            margin: 0;
+            padding: 20px;
+        }
+
+        h3 {
+            color: #333;
+            text-align: center;
+        }
+
+        #controls {
+            display: flex;
+            justify-content: center;
+            gap: 12px;
+            margin: 20px auto;
+        }
+
+        button {
+            padding: 12px 24px;
+            border: none;
+            border-radius: 6px;
+            font-size: 15px;
+            cursor: pointer;
+            transition: background-color 0.2s, opacity 0.2s;
+        }
+
+        #startConsumerBtn {
+            background-color: #7b1fa2;
+            color: white;
+        }
+
+        #startConsumerBtn:hover:not(:disabled) {
+            background-color: #6a1b9a;
+        }
+
+        #simulateBtn {
+            background-color: #1976d2;
+            color: white;
+        }
+
+        #simulateBtn:hover:not(:disabled) {
+            background-color: #1565c0;
+        }
+
+        button:disabled {
+            opacity: 0.4;
+            cursor: not-allowed;
+        }
+
+        #status {
+            text-align: center;
+            font-size: 14px;
+            color: #555;
+            margin-bottom: 10px;
+            min-height: 20px;
+        }
+
+        #transactions {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            border-radius: 10px;
+            background: white;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+        }
+
+        .transaction {
+            border-left: 6px solid #ccc;
+            background: #f9f9f9;
+            padding: 15px;
+            margin-bottom: 15px;
+            border-radius: 6px;
+        }
+
+        .fraud {
+            border-color: #e53935;
+            background-color: #fff3f3;
+        }
+
+        .safe {
+            border-color: #43a047;
+            background-color: #f1fdf3;
+        }
+
+        .label { font-weight: bold; }
+
+        .status { font-size: 1rem; }
+        .status span { font-weight: bold; }
+        .fraud span { color: #e53935; }
+        .safe span  { color: #43a047; }
+    </style>
+</head>
+
+<body>
+
+<h3>📡 Real-Time Fraud Detection</h3>
+
+
+<div id="controls">
+    <button id="startConsumerBtn">
+        ▶ Start Consumer
+    </button>
+
+    <button id="simulateBtn" disabled>
+        📤 Simulate Transactions
+    </button>
+
+    <button id="stopBtn" disabled>
+        ⛔ Stop Transaction Stream
+    </button>
+</div>
+
+
+
+<p id="status">Press "Start Consumer" to initialise the fraud detection pipeline.</p>
+
+<section id="transactions"></section>
+
+<script>
+
+    const startConsumerBtn = document.getElementById("startConsumerBtn");
+    const simulateBtn      = document.getElementById("simulateBtn");
+    const statusEl         = document.getElementById("status");
+    const stopBtn = document.getElementById("stopBtn");
+
+    // ── Start Consumer ──────────────────────────────────────────────
+    startConsumerBtn.addEventListener("click", async () => {
+
+        startConsumerBtn.disabled = true;
+        statusEl.textContent = "⏳ Starting consumer… please wait (this takes ~3 seconds)";
+
+        try {
+            const res = await fetch("/api/start-consumer", { method: "POST" });
+            const text = await res.text();
+
+            if (res.ok) {
+                statusEl.textContent = "✅ Consumer is running. You can now simulate transactions.";
+                simulateBtn.disabled = false;        // unlock the next button
+                startConsumerBtn.textContent = "✅ Consumer Running";
+            } else {
+                statusEl.textContent = "❌ Failed to start consumer: " + text;
+                startConsumerBtn.disabled = false;  // let them retry
+            }
+
+        } catch (err) {
+            statusEl.textContent = "❌ Error: " + err.message;
+            startConsumerBtn.disabled = false;
+        }
+    });
+
+    // ── Simulate Transactions ────────────────────────────────────────
+    simulateBtn.addEventListener("click", async () => {
+
+        simulateBtn.disabled = true;
+        simulateBtn.textContent = "⏳ Starting…";
+        statusEl.textContent = "📤 Streaming transactions into Kafka…";
+
+        try {
+            const res = await fetch("/api/start-simulation", { method: "POST" });
+            const text = await res.text();
+
+            if (res.ok) {
+                simulateBtn.textContent = "📤 Simulation Running";
+                statusEl.textContent = "🔄 Transactions are flowing. Watch the feed below.";
+                stopBtn.disabled = false;
+            } else {
+                statusEl.textContent = "❌ Failed to start simulation: " + text;
+                simulateBtn.disabled = false;
+                simulateBtn.textContent = "📤 Simulate Transactions";
+            }
+
+        } catch (err) {
+            statusEl.textContent = "❌ Error: " + err.message;
+            simulateBtn.disabled = false;
+            simulateBtn.textContent = "📤 Simulate Transactions";
+        }
+    });
+
+    stopBtn.addEventListener(
+        "click",
+        async () => {
+
+            stopBtn.disabled = true;
+
+            try {
+
+                const res = await fetch(
+                    "/api/stop-stream",
+                    {
+                        method: "POST"
+                    }
+                );
+
+                const text =
+                    await res.text();
+
+                if (res.ok) {
+
+                    statusEl.textContent =
+                        "⛔ Stream stopped.";
+
+                    startConsumerBtn.disabled = false;
+                    startConsumerBtn.textContent =
+                        "▶ Start Consumer";
+
+                    simulateBtn.disabled = true;
+                    simulateBtn.textContent =
+                        "📤 Simulate Transactions";
+
+                } else {
+
+                    statusEl.textContent =
+                        "❌ Failed: " + text;
+
+                    stopBtn.disabled = false;
+                }
+
+            } catch (err) {
+
+                statusEl.textContent =
+                    "❌ Error: " +
+                    err.message;
+
+                stopBtn.disabled = false;
+            }
+        }
+    );
+
+    // ── WebSocket ────────────────────────────────────────────────────
+    const socket      = new SockJS('/fraud-websocket');
+    const stompClient = Stomp.over(socket);
+
+    stompClient.connect({}, function () {
+        console.log("✅ Connected to STOMP WebSocket!");
+
+        stompClient.subscribe('/topic/transactions', function (message) {
+            const data        = JSON.parse(message.body);
+            const isFraud     = data.prediction[0].fraud;
+            const probability = data.prediction[0].probability;
+
+            const div = document.createElement("div");
+            div.className = `transaction ${isFraud ? 'fraud' : 'safe'}`;
+            div.innerHTML = `
+                <div class="label">🧾 Transaction:</div>
+                <pre>${JSON.stringify(data.transaction, null, 2)}</pre>
+
+                <div class="label">🔍 Prediction:</div>
+                <div class="status">
+                    ${isFraud ? '<span>🚨 Fraud</span>' : '<span>✅ Safe</span>'}
+                </div>
+
+                <div class="label">📊 Probability:</div>
+                ${probability.toFixed(4)}
+            `;
+
+            document.getElementById("transactions").prepend(div);
+
+            if (isFraud) {
+                alert("⚠️ Fraud detected! Taking action.");
+            }
+        });
+    });
+
+</script>
+
+</body>
+</html>

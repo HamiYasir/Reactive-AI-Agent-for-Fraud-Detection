@@ -1,0 +1,8 @@
+Run Zookeeper
+C:\kafka_2.12-3.9.0> .\bin\windows\zookeeper-server-start.bat .\config\zookeeper.properties
+
+Run Kafka
+PS C:\kafka_2.12-3.9.0> .\bin\windows\kafka-server-start.bat .\config\server.properties
+
+Create topic "fraud_transactions"
+PS C:\kafka_2.12-3.9.0> .\bin\windows\kafka-topics.bat --create --topic fraud_transactions --bootstrap-server localhost:9092 --partitions 1 --replication-factor 1

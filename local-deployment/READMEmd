@@ -1,0 +1,56 @@
+## REQUIREMENTS
+
+- [Java 17](https://www.oracle.com/java/technologies/javase/jdk17-archive-downloads.html)
+- [Intellij IDEA](https://www.jetbrains.com/idea/)
+- [Apache Kafka 3.9.0 Binary Scala 2.12](https://kafka.apache.org/community/downloads/)
+
+### How to run:
+
+1. Configure IntelliJ IDEA project to use Java 17.
+
+    - Open the project.
+    - Go to File → Project Structure (Ctrl+Alt+Shift+S on Windows/Linux).
+    - Select Project on the left.
+    - Set Project SDK → Java 17 and Project language level → 17 (or SDK default)
+    
+    - Go to Modules.
+    - Select your module.
+    - Under Dependencies, set Module SDK → Java 17 
+
+2. Make sure kafka 3.9.0 binary Scala 2.12 is placed in C:/.
+
+3. Open a cmd terminal and run the cmd:
+
+```
+cd C:\kafka
+.\bin\windows\zookeeper-server-start.bat .\config\zookeeper.properties
+```
+
+4. Open a new cmd terminal and run the cmd:
+
+```
+cd C:\kafka_2.12-3.9.0
+.\bin\windows\kafka-server-start.bat .\config\server.properties
+```
+
+5. Open "local-deployment/hosting-model-flask" folder and run:
+
+```
+pip install xgboost flask flask-cors joblib numpy pandas scikit-learn
+python app.py
+```
+6. Now in IntelliJ IDEA terminal, run:
+
+```
+.\gradlew bootRun
+```
+
+7. Open a new vscode terminal in "data streaming" folder. Configure the SMTP with a gmail account and respective app password. Then run the cmd:
+
+```
+pip install python-dotenv
+cd '.\streaming_data_into_model_from consumer\'
+python stream_to_consumer.py
+```
+
+8. Open `http://localhost:8081` in your web browser.  
