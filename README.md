@@ -1,4 +1,4 @@
-# Reactive AI Agent for Fraud Detection
+# FraudWatch Agent - Reactive AI Agent for Fraud Detection
 
 A reactive AI system that detects fraudulent financial transactions in real time using Machine Learning, Apache Kafka, Spring Boot, Flask, WebSockets, and SMTP-based email alerts.
 
@@ -91,7 +91,7 @@ Users can:
 
 ### Local Deployment
 
-The local deployment contains the complete architecture. This is the full implementation of this project and can be run locally. All the files related to this deployment are found in `local-deployment`. It includes:
+The local deployment contains the complete architecture. This is the full implementation of this project and can be run locally. All the files related to this deployment are found in `local-deployment`. Refer README.md file inside `local-deployment` to get this running locally. It includes:
 
 - Apache Kafka
 - ZooKeeper
