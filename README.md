@@ -101,4 +101,6 @@ The local deployment contains the complete architecture. This is the full implem
 
 ## DEPLOYMENT
 
-This app has yet to be deployed :/
+This app has been deployed at [https://fraud-detection-agent-model-frontend.onrender.com](https://fraud-detection-agent-model-frontend.onrender.com)
+
+You can check it out there. Enjoy :)
