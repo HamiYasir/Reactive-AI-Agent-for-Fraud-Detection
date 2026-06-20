@@ -26,9 +26,6 @@ dependencies {
     implementation 'org.springframework.boot:spring-boot-starter-actuator'
     implementation 'org.apache.commons:commons-csv:1.10.0'
 
-    // ✅ Machine Learning dependencies
-    implementation 'nz.ac.waikato.cms.weka:weka-stable:3.8.6'
-
     // ✅ Lombok for reducing boilerplate
     compileOnly 'org.projectlombok:lombok'
     annotationProcessor 'org.projectlombok:lombok'
