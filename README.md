@@ -65,7 +65,14 @@ Dataset
 - Dataset 
     - [creditcard_2023 Dataset](https://www.kaggle.com/datasets/nelgiriyewithana/credit-card-fraud-detection-dataset-2023): Used to train and evaluate the fraud detection machine learning model.
 
+- Deployment
+    -[Render](https://render.com/): Used to deploy the frontend and host the xgboost model.
+
 ## REPOSITORY STRUCTURE
+
+### DOCUMENTATION
+
+This fodler contains files and other documentations realting to the various aspects of this project.
 
 ### Hosted Deployment
 
