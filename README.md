@@ -70,7 +70,7 @@ Dataset
 
 ## REPOSITORY STRUCTURE
 
-### DOCUMENTATION
+### Documentation
 
 This fodler contains files and other documentations realting to the various aspects of this project.
 
